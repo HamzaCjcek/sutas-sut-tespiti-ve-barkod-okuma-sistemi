@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css" />
+</head>
+
+<body>
+
+    <partial name="~/Views/Shared/Partials/_Navbar.cshtml" />
+
+    @RenderBody()
+
+    <partial name="~/Views/Shared/Partials/_Footer.cshtml" />
+
+    <script src="/js/script.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+﻿<main class="page-shell">
+    <section class="page-intro" id="analiz">
+        <div>
+            <p class="eyebrow">ÜRÜN TESPİT MERKEZİ</p>
+            <h1>Raf analizi</h1>
+            <p class="intro-text">Süt ve yoğurt modellerini tek panelden çalıştırın, ürün dağılımını ve raf performansını saniyeler içinde ölçün.</p>
+        </div>
+        <div class="live-pill"><span></span> Canlı analiz</div>
+    </section>
+
+    <section class="model-grid" aria-labelledby="model-title">
+        <h2 class="sr-only" id="model-title">Çalıştırılacak modeli seçin</h2>
+
+        <button class="model-card selected" type="button" data-model="milk" aria-pressed="true">
+            <span class="product-icon milk" aria-hidden="true"><i></i></span>
+            <span class="model-card-copy">
+                <small>SÜT KATEGORİSİ</small>
+                <strong>Süt Modeli</strong>
+                <span>Sütaş süt ve rakip süt ürünlerini algılar.</span>
+            </span>
+            <span class="model-card-meta">
+                <b>Aktif</b>
+                <small>6 ürün sınıfı</small>
+            </span>
+        </button>
+
+        <button class="model-card" type="button" data-model="yogurt" aria-pressed="false">
+            <span class="product-icon yogurt" aria-hidden="true"><i></i></span>
+            <span class="model-card-copy">
+                <small>YOĞURT KATEGORİSİ</small>
+                <strong>Yoğurt Modeli</strong>
+                <span>Sütaş yoğurt ve rakip yoğurt ürünlerini algılar.</span>
+            </span>
+            <span class="model-card-meta">
+                <b>Seç</b>
+                <small>5 ürün sınıfı</small>
+            </span>
+        </button>
+    </section>
+
+    <section class="workspace-grid">
+        <article class="panel upload-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="step">01</span>
+                    <span>
+                        <strong>Raf görselini yükleyin</strong>
+                        <small>Net ve önden çekilmiş görseller daha iyi sonuç verir.</small>
+                    </span>
+                </div>
+                <button class="text-button hidden" id="changeImageButton" type="button">Değiştir</button>
+            </div>
+
+            <input class="sr-only" id="fileInput" type="file" accept="image/png,image/jpeg,image/webp">
+
+            <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Analiz edilecek görseli yükle">
+                <div class="upload-icon" aria-hidden="true">↑</div>
+                <strong>Görseli buraya sürükleyin</strong>
+                <p>veya bilgisayarınızdan bir raf fotoğrafı seçin</p>
+                <button class="secondary-button" id="chooseImageButton" type="button">Görsel seç</button>
+                <small>JPG, PNG veya WEBP · En fazla 10 MB</small>
+            </div>
+
+            <div class="preview-stage hidden" id="previewStage">
+                <img id="previewImage" alt="Analiz için seçilen raf görseli">
+                <div class="boxes-layer" id="boxesLayer" aria-hidden="true"></div>
+                <div class="scan-overlay hidden" id="scanOverlay"><span>Model çalışıyor</span></div>
+            </div>
+
+            <div class="file-strip hidden" id="fileStrip">
+                <span class="file-check">✓</span>
+                <b id="fileName">raf-gorseli.jpg</b>
+                <small>Analize hazır</small>
+            </div>
+        </article>
+
+        <aside class="panel settings-panel">
+            <div class="panel-heading compact">
+                <div>
+                    <span class="step">02</span>
+                    <span>
+                        <strong>Analiz ayarları</strong>
+                        <small>Seçili modele özel</small>
+                    </span>
+                </div>
+            </div>
+
+            <div class="selected-model-box">
+                <span class="product-icon milk mini" id="selectedModelIcon" aria-hidden="true"><i></i></span>
+                <span>
+                    <small>ÇALIŞACAK MODEL</small>
+                    <strong id="selectedModelName">Süt Modeli</strong>
+                </span>
+                <b>v1.0</b>
+            </div>
+
+            <label class="range-label" for="confidenceRange">
+                <span>
+                    <strong>Güven eşiği</strong>
+                    <small>Düşük güvenli tespitleri filtreler</small>
+                </span>
+                <b id="confidenceValue">%55</b>
+            </label>
+            <input class="range-input" id="confidenceRange" type="range" min="30" max="90" value="55">
+            <div class="range-scale"><span>%30</span><span>Dengeli</span><span>%90</span></div>
+
+            <div class="setting-row"><span>Çıktı biçimi</span><b>Kutu + etiket</b></div>
+            <div class="setting-row"><span>İşlem türü</span><b>Tek görsel</b></div>
+
+            <p class="form-message hidden" id="formMessage" role="alert"></p>
+
+            <button class="primary-button" id="analyzeButton" type="button">
+                <span aria-hidden="true">→</span>
+                <b>Süt modelini çalıştır</b>
+            </button>
+            <button class="demo-button" id="demoButton" type="button">Örnek raf görseliyle dene</button>
+            <p class="privacy-note"><span>●</span> Görseller yalnızca analiz amacıyla işlenir.</p>
+        </aside>
+    </section>
+
+    <section class="results-section hidden" id="sonuclar">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">MODEL ÇIKTISI</p>
+                <h2>Analiz sonuçları</h2>
+            </div>
+            <div class="result-actions">
+                <span class="result-model-badge" id="resultModelBadge">Süt Modeli</span>
+                <button class="outline-button" id="downloadButton" type="button">JSON indir</button>
+            </div>
+        </div>
+
+        <div class="metric-grid">
+            <article class="metric-card">
+                <span class="metric-icon">⌗</span>
+                <small>TOPLAM ÜRÜN</small>
+                <strong id="totalCount">0</strong>
+                <p>Güven eşiğini geçen tespit</p>
+            </article>
+            <article class="metric-card">
+                <span class="metric-icon red">S</span>
+                <small>SÜTAŞ ÜRÜNÜ</small>
+                <strong id="sutasCount">0</strong>
+                <p id="sutasShareText">Rafın %0'ı</p>
+            </article>
+            <article class="metric-card">
+                <span class="metric-icon blue">R</span>
+                <small>RAKİP ÜRÜN</small>
+                <strong id="competitorCount">0</strong>
+                <p id="competitorShareText">Rafın %0'ı</p>
+            </article>
+            <article class="metric-card">
+                <span class="metric-icon green">✓</span>
+                <small>ORT. GÜVEN</small>
+                <strong id="averageConfidence">%0</strong>
+                <p id="processingTime">0 ms işlem süresi</p>
+            </article>
+        </div>
+
+        <div class="chart-grid">
+            <article class="chart-card">
+                <div class="card-title">
+                    <div><small>MARKA DAĞILIMI</small><h3>Raf payı</h3></div>
+                    <span>Ürün adedine göre</span>
+                </div>
+                <div class="donut-layout">
+                    <div class="donut-wrap">
+                        <canvas id="shareChart" width="280" height="280" aria-label="Sütaş ve rakip marka dağılım grafiği"></canvas>
+                        <div class="donut-center"><strong id="donutValue">%0</strong><small>Sütaş</small></div>
+                    </div>
+                    <div class="chart-legend">
+                        <div><span class="legend-dot red"></span><p><b>Sütaş</b><small id="legendSutas">0 ürün</small></p></div>
+                        <div><span class="legend-dot slate"></span><p><b>Rakipler</b><small id="legendCompetitors">0 ürün</small></p></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chart-card">
+                <div class="card-title">
+                    <div><small>SINIF DAĞILIMI</small><h3>Tespit edilen ürünler</h3></div>
+                    <span>Adet</span>
+                </div>
+                <div class="bar-chart" id="classChart" role="img" aria-label="Ürün sınıflarına göre tespit adetleri"></div>
+            </article>
+        </div>
+
+        <article class="detections-card">
+            <div class="card-title">
+                <div><small>AYRINTILI SONUÇ</small><h3>Tespit listesi</h3></div>
+                <span id="detectionListCount">0 kayıt</span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>#</th><th>Ürün sınıfı</th><th>Marka</th><th>Güven</th><th>Durum</th></tr></thead>
+                    <tbody id="detectionsTable"></tbody>
+                </table>
+            </div>
+        </article>
+    </section>
+
+    <section class="evaluation-section hidden" id="degerlendirme">
+        <div class="section-heading light-heading">
+            <div>
+                <p class="eyebrow">GENEL DEĞERLENDİRME</p>
+                <h2>Raf performansı</h2>
+            </div>
+            <span class="evaluation-date" id="evaluationDate">Bugünkü analiz</span>
+        </div>
+
+        <div class="evaluation-grid">
+            <article class="score-card">
+                <small>RAF SKORU</small>
+                <div class="score-ring" id="scoreRing">
+                    <strong id="scoreValue">0</strong>
+                    <span>/100</span>
+                </div>
+                <b id="scoreLabel">Değerlendiriliyor</b>
+                <p>Raf payı, tespit güveni ve ürün çeşitliliğine göre hesaplanır.</p>
+            </article>
+
+            <article class="summary-card">
+                <div class="summary-head">
+                    <span class="spark-icon">✦</span>
+                    <div><small>OTOMATİK YORUM</small><h3 id="summaryTitle">Analiz tamamlandı</h3></div>
+                </div>
+                <p id="summaryText">Model sonuçları kullanılarak genel değerlendirme oluşturulacak.</p>
+                <div class="insight-list" id="insightList"></div>
+            </article>
+
+            <article class="recommendation-card">
+                <small>ÖNERİLEN AKSİYON</small>
+                <h3 id="recommendationTitle">Raf görünürlüğünü koruyun</h3>
+                <p id="recommendationText">Analiz sonucuna göre öneri burada görüntülenecek.</p>
+                <div class="priority"><span>Öncelik</span><b id="priorityBadge">Normal</b></div>
+            </article>
+        </div>
+    </section>
+</main>

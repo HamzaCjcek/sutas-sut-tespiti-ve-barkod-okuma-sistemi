@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['Barkod', 'DataMatrix', 'QR-CODE']
+
+roboflow:
+  workspace: hamza-cicek-e0lpf
+  project: barkod-qqnue-abeie
+  version: dataset
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/hamza-cicek-e0lpf/barkod-qqnue-abeie/dataset/dataset
